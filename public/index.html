@@ -99,17 +99,16 @@
   });
 
   function getParams() {
-    const hashParams  = new URLSearchParams(window.location.hash.substring(1));
-    const queryParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
 
-    const token_hash = hashParams.get('token_hash') || queryParams.get('token_hash');
-    const type       = hashParams.get('type')       || queryParams.get('type');
+    const access_token  = hashParams.get('access_token');
+    const refresh_token = hashParams.get('refresh_token');
+    const type          = hashParams.get('type');
 
-    console.log('Full URL:', window.location.href);
-    console.log('token_hash:', token_hash);
+    console.log('access_token:', access_token);
     console.log('type:', type);
 
-    return { token_hash, type };
+    return { access_token, refresh_token, type };
   }
 
   async function resetPassword() {
