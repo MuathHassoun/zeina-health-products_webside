@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
@@ -87,15 +88,28 @@
   <div class="message" id="msg"></div>
 </div>
 
+
 <script>
-  // extract token_hash from URL — supabase puts it in the hash fragment
+  // debug — shows full URL on screen
+  document.addEventListener('DOMContentLoaded', () => {
+    const debug = document.createElement('p');
+    debug.style = 'font-size:11px; word-break:break-all; color:red; margin-top:10px;';
+    debug.textContent = window.location.href;
+    document.querySelector('.card').appendChild(debug);
+  });
+
   function getParams() {
-    const hash   = window.location.hash.substring(1);
-    const params = new URLSearchParams(hash);
-    return {
-      token_hash: params.get('token_hash'),
-      type:       params.get('type'),
-    };
+    const hashParams  = new URLSearchParams(window.location.hash.substring(1));
+    const queryParams = new URLSearchParams(window.location.search);
+
+    const token_hash = hashParams.get('token_hash') || queryParams.get('token_hash');
+    const type       = hashParams.get('type')       || queryParams.get('type');
+
+    console.log('Full URL:', window.location.href);
+    console.log('token_hash:', token_hash);
+    console.log('type:', type);
+
+    return { token_hash, type };
   }
 
   async function resetPassword() {
@@ -124,7 +138,7 @@
 
     const { token_hash, type } = getParams();
 
-    const res  = await fetch('/api/update-password', {
+    const res = await fetch('/api/update-password', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ token_hash, type, password }),
