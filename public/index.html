@@ -1,160 +1,445 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إعادة تعيين كلمة المرور</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --brown-deep:   #3B2010;
+      --brown-mid:    #6B3A1F;
+      --brown-light:  #A0622A;
+      --cream:        #FAF6F1;
+      --cream-dark:   #EFE7DC;
+      --text-dark:    #2C1A0E;
+      --text-muted:   #9E8472;
+      --green:        #2E7D52;
+      --green-bg:     #EAF5EF;
+      --red:          #C0392B;
+      --red-bg:       #FDECEA;
+      --border:       #DDD3C8;
+      --shadow:       rgba(59, 32, 16, 0.12);
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      font-family: Arial, sans-serif;
-      background: #f5f0eb;
+      font-family: 'Tajawal', sans-serif;
+      background: var(--cream);
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Decorative background blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      opacity: 0.07;
+      pointer-events: none;
+    }
+    body::before {
+      width: 500px; height: 500px;
+      background: var(--brown-mid);
+      top: -150px; left: -150px;
+    }
+    body::after {
+      width: 400px; height: 400px;
+      background: var(--brown-light);
+      bottom: -120px; right: -100px;
     }
 
     .card {
       background: white;
-      border-radius: 12px;
-      padding: 40px 32px;
+      border-radius: 20px;
+      padding: 48px 40px 40px;
       width: 100%;
-      max-width: 400px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      text-align: center;
+      max-width: 420px;
+      box-shadow:
+        0 2px 0 var(--cream-dark),
+        0 8px 32px var(--shadow),
+        0 32px 64px rgba(59,32,16,0.06);
+      position: relative;
+      animation: slideUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
-    h2 { color: #4A3321; margin-bottom: 8px; font-size: 22px; }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
-    p.subtitle { color: #888; font-size: 14px; margin-bottom: 28px; }
+    /* Top accent stripe */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; right: 0; left: 0;
+      height: 4px;
+      background: linear-gradient(to left, var(--brown-light), var(--brown-deep));
+      border-radius: 20px 20px 0 0;
+    }
 
-    input {
+    .icon-wrap {
+      width: 64px; height: 64px;
+      background: linear-gradient(135deg, var(--brown-deep), var(--brown-light));
+      border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px;
+      box-shadow: 0 8px 20px rgba(59,32,16,0.25);
+      animation: popIn 0.6s 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.6); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+      color: var(--text-dark);
+      font-size: 22px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 32px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    .field {
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 7px;
+      padding-right: 2px;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    input[type="password"], input[type="text"] {
       width: 100%;
-      padding: 12px 16px;
-      border: 1.5px solid #ddd;
-      border-radius: 8px;
+      padding: 13px 16px 13px 44px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
       font-size: 15px;
-      margin-bottom: 14px;
+      font-family: 'Tajawal', sans-serif;
+      color: var(--text-dark);
+      background: var(--cream);
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
       text-align: right;
     }
 
-    input:focus { border-color: #503520; }
-
-    button {
-      width: 100%;
-      padding: 13px;
-      background: #503520;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      margin-top: 4px;
-      transition: background 0.2s;
+    input:focus {
+      border-color: var(--brown-mid);
+      background: white;
+      box-shadow: 0 0 0 3px rgba(107,58,31,0.10);
     }
 
-    button:hover { background: #3d2818; }
-    button:disabled { background: #aaa; cursor: not-allowed; }
+    input.valid   { border-color: var(--green); }
+    input.invalid { border-color: var(--red); }
+
+    .toggle-eye {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 17px;
+      padding: 4px;
+      line-height: 1;
+      transition: color 0.2s;
+      width: auto;
+    }
+    .toggle-eye:hover { color: var(--brown-mid); }
+
+    /* Strength bar */
+    .strength-bar {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+      height: 4px;
+    }
+    .strength-bar span {
+      flex: 1;
+      border-radius: 4px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .strength-bar.s1 span:nth-child(1) { background: var(--red); }
+    .strength-bar.s2 span:nth-child(1),
+    .strength-bar.s2 span:nth-child(2) { background: #E67E22; }
+    .strength-bar.s3 span:nth-child(1),
+    .strength-bar.s3 span:nth-child(2),
+    .strength-bar.s3 span:nth-child(3) { background: var(--green); }
+
+    .strength-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      text-align: left;
+      min-height: 16px;
+    }
+
+    button#btn {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, var(--brown-deep) 0%, var(--brown-mid) 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: 'Tajawal', sans-serif;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(59,32,16,0.25);
+      letter-spacing: 0.3px;
+    }
+
+    button#btn:hover:not(:disabled) {
+      opacity: 0.92;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 24px rgba(59,32,16,0.30);
+    }
+    button#btn:active:not(:disabled) { transform: translateY(0); }
+    button#btn:disabled {
+      background: #C5B8AF;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
 
     .message {
       margin-top: 18px;
-      padding: 12px;
-      border-radius: 8px;
+      padding: 13px 16px;
+      border-radius: 10px;
       font-size: 14px;
+      font-weight: 500;
       display: none;
+      animation: fadeIn 0.3s ease both;
+      line-height: 1.5;
+    }
+    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+    .message.success {
+      background: var(--green-bg);
+      color: var(--green);
+      border: 1px solid #B8DFC9;
+      display: block;
+    }
+    .message.error {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid #F4C2BC;
+      display: block;
     }
 
-    .message.success { background: #e6f4ea; color: #2d7a3a; display: block; }
-    .message.error   { background: #fdecea; color: #c0392b; display: block; }
+    /* Loading spinner inside button */
+    .spinner {
+      display: inline-block;
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Debug URL (remove in production) */
+    #debug-url {
+      font-size: 10px;
+      word-break: break-all;
+      color: #BBA;
+      margin-top: 14px;
+      padding: 8px;
+      background: #FAF6F1;
+      border-radius: 6px;
+      text-align: left;
+      direction: ltr;
+    }
   </style>
 </head>
 <body>
-<div class="card">
-  <h2>🔒 إعادة تعيين كلمة المرور</h2>
-  <p class="subtitle">أدخل كلمة المرور الجديدة</p>
 
-  <input type="password" id="password"     placeholder="كلمة المرور الجديدة" />
-  <input type="password" id="passwordConf" placeholder="تأكيد كلمة المرور"   />
+<div class="card">
+  <div class="icon-wrap">🔑</div>
+  <h2>إعادة تعيين كلمة المرور</h2>
+  <p class="subtitle">أدخل كلمة مرور جديدة وقوية لحماية حسابك</p>
+
+  <div class="field">
+    <label for="password">كلمة المرور الجديدة</label>
+    <div class="input-wrap">
+      <input type="password" id="password" placeholder="أدخل كلمة المرور" autocomplete="new-password" oninput="checkStrength()">
+      <button class="toggle-eye" type="button" onclick="toggleVis('password', this)" title="إظهار / إخفاء">👁</button>
+    </div>
+    <div class="strength-bar" id="strengthBar">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="strength-label" id="strengthLabel"></div>
+  </div>
+
+  <div class="field">
+    <label for="passwordConf">تأكيد كلمة المرور</label>
+    <div class="input-wrap">
+      <input type="password" id="passwordConf" placeholder="أعد إدخال كلمة المرور" autocomplete="new-password" oninput="checkMatch()">
+      <button class="toggle-eye" type="button" onclick="toggleVis('passwordConf', this)" title="إظهار / إخفاء">👁</button>
+    </div>
+  </div>
 
   <button id="btn" onclick="resetPassword()">تحديث كلمة المرور</button>
 
   <div class="message" id="msg"></div>
+  <div id="debug-url"></div>
 </div>
 
-
 <script>
-  // debug — shows full URL on screen
-  document.addEventListener('DOMContentLoaded', () => {
-    const debug = document.createElement('p');
-    debug.style = 'font-size:11px; word-break:break-all; color:red; margin-top:10px;';
-    debug.textContent = window.location.href;
-    document.querySelector('.card').appendChild(debug);
-  });
+  // Show current URL for debugging (remove in production)
+  document.getElementById('debug-url').textContent = window.location.href;
 
-  function getParams() {
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-
-    const access_token  = hashParams.get('access_token');
-    const refresh_token = hashParams.get('refresh_token');
-    const type          = hashParams.get('type');
-
-    console.log('access_token:', access_token);
-    console.log('type:', type);
-
-    return { access_token, refresh_token, type };
+  /* ── Toggle password visibility ── */
+  function toggleVis(id, btn) {
+    const inp = document.getElementById(id);
+    const isText = inp.type === 'text';
+    inp.type = isText ? 'password' : 'text';
+    btn.textContent = isText ? '👁' : '🙈';
   }
 
+  /* ── Strength meter ── */
+  function checkStrength() {
+    const val = document.getElementById('password').value;
+    const bar = document.getElementById('strengthBar');
+    const lbl = document.getElementById('strengthLabel');
+    bar.className = 'strength-bar';
+    if (!val) { lbl.textContent = ''; return; }
+    let score = 0;
+    if (val.length >= 8) score++;
+    if (/[A-Z]/.test(val) || /[a-z]/.test(val)) score++;
+    if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
+    const labels = ['', 'ضعيفة', 'متوسطة', 'قوية'];
+    bar.classList.add('s' + score);
+    lbl.textContent = labels[score] || '';
+    checkMatch();
+  }
+
+  /* ── Match indicator ── */
+  function checkMatch() {
+    const p  = document.getElementById('password').value;
+    const c  = document.getElementById('passwordConf').value;
+    const el = document.getElementById('passwordConf');
+    el.classList.remove('valid', 'invalid');
+    if (!c) return;
+    el.classList.add(p === c ? 'valid' : 'invalid');
+  }
+
+  /* ── Extract params from URL hash ── */
+  function getParams() {
+    const hash   = window.location.hash.substring(1);
+    const params = new URLSearchParams(hash);
+    return {
+      access_token:  params.get('access_token'),
+      refresh_token: params.get('refresh_token'),
+      type:          params.get('type'),
+    };
+  }
+
+  /* ── Token expiry check (client-side) ── */
+  function isTokenExpired(token) {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      return payload.exp < Math.floor(Date.now() / 1000);
+    } catch { return true; }
+  }
+
+  /* ── Main reset handler ── */
   async function resetPassword() {
     const password     = document.getElementById('password').value;
     const passwordConf = document.getElementById('passwordConf').value;
     const btn          = document.getElementById('btn');
     const msg          = document.getElementById('msg');
 
+    // Reset message
     msg.className   = 'message';
     msg.textContent = '';
 
+    // Client validations
     if (password.length < 6) {
-      msg.className   = 'message error';
-      msg.textContent = 'كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+      showMsg('error', '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل');
       return;
     }
-
     if (password !== passwordConf) {
-      msg.className   = 'message error';
-      msg.textContent = 'كلمتا المرور غير متطابقتين';
+      showMsg('error', '⚠️ كلمتا المرور غير متطابقتين');
       return;
     }
 
+    const { access_token, refresh_token, type } = getParams();
+
+    if (!access_token || type !== 'recovery') {
+      showMsg('error', '❌ رابط إعادة التعيين غير صالح. يرجى طلب رابط جديد.');
+      return;
+    }
+
+    if (isTokenExpired(access_token)) {
+      showMsg('error', '⏰ انتهت صلاحية الرابط. يرجى طلب رابط جديد.');
+      return;
+    }
+
+    // Loading state
     btn.disabled    = true;
-    btn.textContent = 'جاري التحديث...';
+    btn.innerHTML   = 'جاري التحديث <span class="spinner"></span>';
 
-    const { token_hash, type } = getParams();
+    try {
+      const res  = await fetch('/api/update-password', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ access_token, refresh_token, type, password }),
+      });
+      const data = await res.json();
 
-    const res = await fetch('/api/update-password', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ token_hash, type, password }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      msg.className   = 'message error';
-      msg.textContent = 'حدث خطأ: ' + data.error;
+      if (!res.ok) {
+        showMsg('error', '❌ حدث خطأ: ' + (data.error || 'خطأ غير معروف'));
+        btn.disabled    = false;
+        btn.textContent = 'تحديث كلمة المرور';
+      } else {
+        showMsg('success', '✅ تم تحديث كلمة المرور بنجاح! يمكنك الآن تسجيل الدخول.');
+        btn.textContent = '✓ تم بنجاح';
+      }
+    } catch (err) {
+      showMsg('error', '❌ تعذّر الاتصال بالخادم. تحقق من اتصالك بالإنترنت.');
       btn.disabled    = false;
       btn.textContent = 'تحديث كلمة المرور';
-    } else {
-      msg.className   = 'message success';
-      msg.textContent = '✅ تم تحديث كلمة المرور بنجاح!';
-      btn.textContent = 'تم ✓';
     }
+  }
+
+  function showMsg(type, text) {
+    const msg = document.getElementById('msg');
+    msg.className   = 'message ' + type;
+    msg.textContent = text;
   }
 </script>
 </body>
